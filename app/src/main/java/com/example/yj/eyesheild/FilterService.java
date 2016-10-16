@@ -24,7 +24,7 @@ public class FilterService extends Service {
 
     private WindowManager windowManager;
     private WindowManager.LayoutParams lp;
-    private HUDView hudView;
+    private FilterView filterView;
     private int nFlags;
 
     @Override
@@ -39,7 +39,7 @@ public class FilterService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        hudView = new HUDView(this, MainActivity.a);
+        filterView = new FilterView(this, MainActivity.a);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             nFlags =WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE|WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS;
@@ -54,7 +54,7 @@ public class FilterService extends Service {
         lp.gravity = Gravity.LEFT | Gravity.TOP;
 //        lp.gravity = Gravity.FILL;
 
-        windowManager.addView(hudView, lp);
+        windowManager.addView(filterView, lp);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
         builder.setContentTitle("Pause Button is running");
@@ -72,22 +72,22 @@ public class FilterService extends Service {
     public void onDestroy() {
         super.onDestroy();
         stopForeground(true);
-        if (hudView != null) {
-            windowManager.removeView(hudView);
-            hudView = null;
+        if (filterView != null) {
+            windowManager.removeView(filterView);
+            filterView = null;
         }
     }
 }
 
-class HUDView extends View {
+class FilterView extends View {
     private Paint mLoadPaint;
 
-    public HUDView(Context context, Paint mLoadPaint) {
+    public FilterView(Context context, Paint mLoadPaint) {
         super(context);
         this.mLoadPaint = mLoadPaint;
     }
 
-    public HUDView(Context context, MainActivity activity) {
+    public FilterView(Context context, MainActivity activity) {
         super(context);
         Toast.makeText(getContext(), "Pause Button Started", Toast.LENGTH_SHORT).show();
         FilterService.activity = activity;
